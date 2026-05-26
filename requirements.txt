@@ -1,3 +1,9 @@
+# ── Dependências obrigatórias ────────────────────────────────────────
 playwright==1.52.0
 SpeechRecognition==3.14.1
 PyAudio==0.2.14
+
+# ── Dependências do Whisper (opcionais — descomente para usar) ──────
+# openai-whisper
+# torch
+# numpy

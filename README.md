@@ -19,16 +19,32 @@ automático.
 └──────────────────┘  texto preenchido / cancel  └──────────────────┘
 ```
 
+### Estrutura de Arquivos
+
+```
+tcc/
+├── main.py            # Ponto de entrada do programa
+├── config.py          # Constantes e configuração do logger
+├── speech.py          # Camada de reconhecimento de fala (STT)
+├── browser.py         # Controle do DOM (FormField + DOMMapper)
+├── matcher.py         # Correspondência fuzzy (AppState + FieldMatcher)
+├── controller.py      # Controlador principal (VoiceFormFiller)
+├── test_form.html     # Formulário HTML de teste
+├── requirements.txt   # Dependências Python
+└── README.md
+```
+
 ### Componentes
 
-| Classe                   | Responsabilidade                                      |
-|--------------------------|-------------------------------------------------------|
-| `SpeechRecognizerBase`   | Interface abstrata para motores de STT (SOLID)        |
-| `GoogleSpeechRecognizer` | Implementação usando Google Web Speech API             |
-| `MicrophoneListener`     | Captura de áudio + calibração de ruído ambiente        |
-| `DOMMapper`              | Varredura do DOM e mapeamento de campos do formulário  |
-| `FieldMatcher`           | Correspondência fuzzy entre fala e nomes de campos     |
-| `VoiceFormFiller`        | Controlador principal — máquina de estados + loop      |
+| Classe                   | Arquivo         | Responsabilidade                                      |
+|--------------------------|-----------------|-------------------------------------------------------|
+| `SpeechRecognizerBase`   | `speech.py`     | Interface abstrata para motores de STT (SOLID)        |
+| `GoogleSpeechRecognizer` | `speech.py`     | Implementação usando Google Web Speech API             |
+| `MicrophoneListener`     | `speech.py`     | Captura de áudio + calibração de ruído ambiente        |
+| `FormField`              | `browser.py`    | Dataclass que representa um campo mapeado do DOM       |
+| `DOMMapper`              | `browser.py`    | Varredura do DOM e mapeamento de campos do formulário  |
+| `FieldMatcher`           | `matcher.py`    | Correspondência fuzzy entre fala e nomes de campos     |
+| `VoiceFormFiller`        | `controller.py` | Controlador principal — máquina de estados + loop      |
 
 ## Pré-requisitos
 
@@ -62,10 +78,10 @@ playwright install chromium
 
 ```bash
 # Executa abrindo o formulário local de teste (test_form.html) automaticamente!
-python voice_form_filler.py
+python main.py
 
 # Ou especifique qualquer formulário online
-python voice_form_filler.py "https://httpbin.org/forms/post"
+python main.py "https://httpbin.org/forms/post"
 ```
 
 ### Comandos de Voz
@@ -80,8 +96,8 @@ python voice_form_filler.py "https://httpbin.org/forms/post"
 ## Extensibilidade
 
 Para trocar o motor de reconhecimento de fala (ex: Whisper, Vosk), basta criar
-uma nova classe que herde de `SpeechRecognizerBase` e implemente o método
-`recognize()`:
+uma nova classe em `speech.py` que herde de `SpeechRecognizerBase` e implemente
+o método `recognize()`:
 
 ```python
 class WhisperRecognizer(SpeechRecognizerBase):
@@ -93,4 +109,3 @@ class WhisperRecognizer(SpeechRecognizerBase):
 ## Licença
 
 Projeto acadêmico — TCC.
-# TCC
